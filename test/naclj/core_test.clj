@@ -1,9 +1,7 @@
 (ns naclj.core-test
 	(:import 
-;	  (org.abstractj.kalium.keys KeyPair PrivateKey PublicKey)
-;	  (org.abstractj.kalium.encoders Encoder Hex Raw)
-	  (org.abstractj.kalium NaCl)
-	  (org.abstractj.kalium NaCl$Sodium)
+	  (com.github.franks42.naclj NaCl)
+	  (com.github.franks42.naclj NaCl$Sodium)
 	  (org.apache.commons.codec.binary)
     )
   (:require 

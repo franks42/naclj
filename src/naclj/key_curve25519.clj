@@ -1,7 +1,7 @@
 (ns naclj.key-curve25519
 	(:import 
-	  (org.abstractj.kalium NaCl)
-	  (org.abstractj.kalium NaCl$Sodium)
+	  (com.github.franks42.naclj NaCl)
+	  (com.github.franks42.naclj NaCl$Sodium)
     )
 	(:require 
 	  [naclj.key-protocol :refer :all]

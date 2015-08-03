@@ -1,7 +1,7 @@
 (ns naclj.hash-sha256
 	(:import 
-	  (org.abstractj.kalium NaCl)
-	  (org.abstractj.kalium NaCl$Sodium)
+	  (com.github.franks42.naclj NaCl)
+	  (com.github.franks42.naclj NaCl$Sodium)
     [clojure.lang IFn]
     [clojure.lang.AFn])
 	(:require 

@@ -1,9 +1,5 @@
 (ns naclj.core
 	(:import 
-;	  (org.abstractj.kalium.keys KeyPair PrivateKey PublicKey SigningKey VerifyKey)
-;	  (org.abstractj.kalium.encoders Encoder Hex Raw)
-;	  (org.abstractj.kalium NaCl$Sodium)
-;	  (org.abstractj.kalium.crypto Random)
     )
 	(:require 
 	  [naclj.hash-protocol :refer :all]

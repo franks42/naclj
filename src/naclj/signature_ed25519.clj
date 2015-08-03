@@ -1,7 +1,7 @@
 (ns naclj.signature-ed25519
 	(:import 
-	  (org.abstractj.kalium NaCl)
-	  (org.abstractj.kalium NaCl$Sodium)
+	  (com.github.franks42.naclj NaCl)
+	  (com.github.franks42.naclj NaCl$Sodium)
 	  (jnr.ffi.byref.LongLongByReference)
     [clojure.lang IFn]
     [clojure.lang.AFn]

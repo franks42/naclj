@@ -3,8 +3,8 @@
 	(:import 
 	  (java.util Arrays Base64)
 	  (org.apache.commons.codec.binary)
-	  (org.abstractj.kalium NaCl)
-	  (org.abstractj.kalium NaCl$Sodium)
+	  (com.github.franks42.naclj NaCl)
+	  (com.github.franks42.naclj NaCl$Sodium)
     ))
 
 ;; helper fn

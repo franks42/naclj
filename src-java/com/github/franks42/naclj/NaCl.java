@@ -1,4 +1,5 @@
 /**
+ * Copyright 2015 Frank Siebenlist
  * Copyright 2013 Bruno Oliveira, and individual contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,14 @@
  * limitations under the License.
  */
 
-package org.abstractj.kalium;
+/**
+ * This file is based on Kalium's org.abstractj.kalium/NaCl.java
+ * but is heavily extended with more interface definitions
+ * for use with the naclj library
+ */
+
+
+package com.github.franks42.naclj;
 
 import jnr.ffi.LibraryLoader;
 import jnr.ffi.annotations.In;
