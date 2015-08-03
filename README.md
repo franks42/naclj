@@ -6,6 +6,15 @@ Clojure library that abstracts libsodium's C-library's crypto primitives (curve2
 
 Still under construction... please check back later...
 
+## Installation
+
+Requires the C-library libsodium to be installed.
+On Mac the easiest way to install is probably through brew:
+
+    brew install libsodium
+
+
+
 ## History
 
 I was looking for a Clojure library to work with NaCl's primitives. First I found the Clojure library Caesium, which is layered on top of Kalium, which is a Java library layered on top of libsodium.

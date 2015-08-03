@@ -17,7 +17,9 @@
 
 /**
  * This file is based on Kalium's org.abstractj.kalium/NaCl.java
+ * (Thanks Bruno!!!)
  * but is heavily extended with more interface definitions
+ * and tries to substitute the defined constants with equivalent libsodium calls
  * for use with the naclj library
  */
 
@@ -135,9 +137,6 @@ public class NaCl {
 
         public int crypto_hash_sha256(@Out byte[] buffer, @In byte[] message, @u_int64_t long sizeof);
         
-        //int crypto_hash_sha256_init(crypto_hash_sha256_state *state)
-        //int crypto_hash_sha256_update(crypto_hash_sha256_state *state, const unsigned char *in, unsigned long long inlen)
-        //int crypto_hash_sha256_final(crypto_hash_sha256_state *state, unsigned char *out)
         public int crypto_hash_sha256_init(@Out byte[] state); 
         public int crypto_hash_sha256_update(byte[] state, @In byte[] in, @u_int64_t long inlen);
         public int crypto_hash_sha256_final(byte[] state, @Out byte[] out);
@@ -165,18 +164,6 @@ public class NaCl {
                                                             @In byte[] salt,
                                                             @In byte[] personal);
 
-        // int crypto_generichash_blake2b_init(crypto_generichash_blake2b_state *state,
-        //                                     const unsigned char *key, const size_t keylen, 
-        //                                     const size_t outlen)
-        //int crypto_generichash_blake2b_init_salt_personal(crypto_generichash_blake2b_state *state,
-        //                                      const unsigned char *key,
-        //                                      const size_t keylen, const size_t outlen,
-        //                                      const unsigned char *salt,
-        //                                      const unsigned char *personal)
-        // int crypto_generichash_blake2b_update(crypto_generichash_blake2b_state *state,
-        //                                       const unsigned char *in, unsigned long long inlen)
-        // int crypto_generichash_blake2b_final(crypto_generichash_blake2b_state *state,
-        //                                      unsigned char *out, const size_t outlen)
         public int crypto_generichash_blake2b_init(@Out byte[] state, 
                                                    @In byte[] key, @u_int64_t long keylen, 
                                                    @u_int64_t long outlen);
