@@ -1,2 +1,14 @@
 # naclj
-Clojure library that abstracts libsodium's crypto primitives (curve25519, ed25519, blake2b, etc.)
+
+A Clojure library designed to ... well, that part is up to you.
+
+## Usage
+
+FIXME
+
+## License
+
+Copyright © 2015 FIXME
+
+Distributed under the Eclipse Public License either version 1.0 or (at
+your option) any later version.
