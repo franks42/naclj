@@ -1,5 +1,5 @@
 (ns naclj.encode-util
-  (require [cognitect.transit :as t])
+  (:require [cognitect.transit :as t])
 	(:import 
 	  (java.util Arrays Base64)
 	  (org.apache.commons.codec.binary)
@@ -9,17 +9,19 @@
 
 ;; helper fn
 
-(defn -keywd2str [k-or-s]
+(defn -keywd2str
   "Converts a keyword into a string without the ':'.
   Used for Java interop by using keywords for string-constants."
+  [k-or-s]
   (if (string? k-or-s)
     k-or-s
     (if-let [n (namespace k-or-s)]
       (str n "/" (name k-or-s))
       (name k-or-s))))
 
-(defn byte-array? [bs] 
+(defn byte-array? 
   "Ugly convenience fn to check for byte-array type"
+  [bs]
   (= (str (type bs)) "class [B"))
 
 ;;----
@@ -67,8 +69,7 @@
   IString
     (=>string 
       ([this] this)
-      ([this char-set] this))
-  )
+      ([this char-set] this)))
 
 (extend-type (Class/forName "[B")
   IString
@@ -102,13 +103,11 @@
 (defprotocol Ibase64urlEncode
   "Encode to base64url array"
   (=>base64url [this])
-  (=>base64url-str [this])
-  )
+  (=>base64url-str [this]))
 
 (defprotocol Ibase64urlDecode
   "Decode from base64url array to bytes"
-  (base64url=> [this])
-  )
+  (base64url=> [this]))
 
 
 (extend-type java.lang.String

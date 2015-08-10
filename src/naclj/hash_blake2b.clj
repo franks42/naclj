@@ -4,6 +4,7 @@
 	  (com.github.franks42.naclj NaCl$Sodium)
     [clojure.lang IFn]
     [clojure.lang.AFn])
+  (:refer-clojure :exclude [update])
 	(:require 
 	  [naclj.hash-protocol :refer :all]
 	  [naclj.encode-util :refer :all]
@@ -99,8 +100,8 @@
                      d-s))
         digest-state (byte-array generichash-statebytes)
         ret (.crypto_generichash_blake2b_init_salt_personal 
-                   (NaCl/sodium) 
-                   digest-state 
+                   (NaCl/sodium)
+                   digest-state
                    k k-s
                    outbytes
                    s p)]

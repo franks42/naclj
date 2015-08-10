@@ -227,7 +227,8 @@ public class NaCl {
 
 // crypto_ed25519
 
-        int crypto_sign_ed25519_seed_keypair(@Out byte[] publicKey, @Out byte[] secretKey, @In byte[] seed);
+        int crypto_sign_ed25519_seed_keypair(@Out byte[] publicKey, @Out byte[] secretKey, 
+                                             @In byte[] seed);
 
         int crypto_sign_ed25519_keypair(@Out byte[] publicKey, @Out byte[] secretKey);
 

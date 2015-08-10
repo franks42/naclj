@@ -1,7 +1,6 @@
 (ns naclj.hash-blake2b-test
   (:require 
     [clojure.test :refer :all]
-	  [clojure.tools.namespace.repl :refer [refresh]]
 	  [naclj.encode-util :refer :all]
  	  [naclj.fixture :as f]
     [naclj.hash-blake2b :as hb]

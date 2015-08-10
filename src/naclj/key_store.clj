@@ -2,8 +2,8 @@
 
 (def the-key-store (atom {}))
 
-(defn make-keystore [owner]
-  (assoc the-key-store owner))
+;(defn make-keystore [owner]
+;  (assoc the-key-store owner))
   
 (defn add-key [owner key value]
   (swap! the-key-store assoc-in [owner key] value))

@@ -11,7 +11,6 @@
 	  [naclj.key-protocol :refer :all]
 	  [naclj.encode-util :refer :all]
 	  [naclj.fixture :as f]
-	  [clojure.tools.namespace.repl :refer [refresh]]
 	  [clojure.java.io :refer [reader writer]]
 	  ))
 

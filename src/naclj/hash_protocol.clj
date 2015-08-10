@@ -1,5 +1,6 @@
 (ns naclj.hash-protocol
-  (require
+  (:refer-clojure :exclude [update])
+  (:require
     [naclj.encode-util :refer :all])
 	(:import 
 	  (java.net.URI)))

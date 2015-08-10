@@ -6,7 +6,6 @@
     )
   (:require 
     [clojure.test :refer :all]
-	  [clojure.tools.namespace.repl :refer [refresh]]
 	  [naclj.protocol :refer :all]
 	  [naclj.encode-util :refer :all]
  	  [naclj.fixture :as f]

@@ -4,6 +4,7 @@
 	  (com.github.franks42.naclj NaCl$Sodium)
     [clojure.lang IFn]
     [clojure.lang.AFn])
+  (:refer-clojure :exclude [update])
 	(:require 
 	  [naclj.hash-protocol :refer :all]
 	  [naclj.encode-util :refer :all]

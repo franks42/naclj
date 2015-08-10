@@ -9,7 +9,6 @@
 	  [naclj.key-protocol :refer :all]
 	  [naclj.encode-util :refer :all]
 	  [naclj.fixture :as f]
-	  [clojure.tools.namespace.repl :refer [refresh]]
 	  [clojure.java.io :refer [reader writer]]
 	  ))
 
@@ -56,6 +55,9 @@
     (key-pair [this] this)
     (private-key [this] (:private-key this))
     (public-key [this] (:public-key this))
+  ISigningKeyPair
+    (signing-key [this] (private-key this))
+    (verifying-key [this] (public-key this))
   IKeyInfo
     (algorithm [this] "ed25519")
   IEqual
@@ -129,4 +131,6 @@
 (defmethod key-pair? TEd25519KeyPair [o] true)
 (defmethod private-key? TEd25519PrivateKey [o] true)
 (defmethod public-key? TEd25519PublicKey [o] true)
+(defmethod signing-key? TEd25519PrivateKey [o] true)
+(defmethod verifying-key? TEd25519PublicKey [o] true)
 

@@ -1,7 +1,6 @@
 (ns naclj.key-curve25519-test
   (:require 
     [clojure.test :refer :all]
-	  [clojure.tools.namespace.repl :refer [refresh]]
 	  [naclj.encode-util :refer :all]
  	  [naclj.fixture :as f]
     [naclj.hash-sha256 :as hb]

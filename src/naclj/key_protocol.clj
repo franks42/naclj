@@ -1,5 +1,7 @@
 (ns naclj.key-protocol
-  (:require [naclj.encode-util :refer :all]))
+  (:require [naclj.encode-util :refer :all]
+            [naclj.hash-protocol :as hp]
+            [naclj.hash-blake2b]))
 
 ;;
 
@@ -16,6 +18,18 @@
   (private-key [this])
   (public-key [this])
   (key-pair [this])
+  )
+
+(defprotocol ISigningKeyPair
+  "Convenience functions that work with a key-pair dedicated to signing and verifying operations."
+  (signing-key [this])
+  (verifying-key [this])
+  )
+
+(defprotocol IEncryptionKeyPair
+  "Convenience functions that work with a key-pair dedicated to encryption and decryption operations."
+  (encryption-key [this])
+  (decryption-key [this])
   )
 
 (defprotocol IPrivateKey
@@ -47,14 +61,22 @@
 (defmulti key-pair? type)
 (defmulti private-key? type)
 (defmulti public-key? type)
+(defmulti signing-key? type)
+(defmulti verifying-key? type)
+(defmulti decryption-key? type)
+(defmulti encryption-key? type)
 
 (defmethod key-pair? :default [o] false)
 (defmethod private-key? :default [o] false)
 (defmethod public-key? :default [o] false)
+(defmethod signing-key? :default [o] false)
+(defmethod verifying-key? :default [o] false)
+(defmethod decryption-key? :default [o] false)
+(defmethod encryption-key? :default [o] false)
 
 ;;;
 
-(defrecord TGenericKey [key-bs])
+(defrecord TGenericKey [key-bs provider])
 
 (defmulti make-key
   (fn [provider function & xs] [provider function]))
@@ -81,5 +103,21 @@
   (=>bytes [this] (aclone (:key-bs this)))
   )
 
-
+(defn key-hash-id
+  "In order to obtain an intrinsic identifier/name for a key/secret-key/private-key,
+  we return the hash of that byte-array of that secret.
+  To add an additional layer of security, we use a key'ed hashing algorithm where the hashing-key
+  is the secret itself. 
+  In order to obtain a hashing-key of the correct size, we actually hash the secret one time.
+  The resulting byte-array hash value will be a univerally unique identifier for the secret, which
+  does not leak any data from the secret itself.
+  For easier consumption, the returned byte-array can be converted to hex or base64(url)."
+  [bs]
+  (let [bs (=>bytes bs)
+        ;; first hash the key byte-array to obtain a key-length we can use for the hashing-key
+        h (hp/digest (hp/make-message-digester :sodium :blake2b) bs)
+        ;; then use the hash value as the hashing-key to hash the original key
+		kh (hp/digest (hp/make-message-digester :sodium :blake2b :key (=>bytes h)) bs)]
+	;; return the resulting byte-array as the identifier to use.
+    (=>bytes kh)))
 ;;;

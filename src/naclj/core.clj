@@ -1,8 +1,6 @@
 (ns naclj.core
-	(:import 
-    )
 	(:require 
-	  [naclj.hash-protocol :refer :all]
+	  [naclj.hash-protocol :as hp]
 	  [naclj.key-protocol :as kp]
 	  [naclj.key-curve25519]
 	  [naclj.key-ed25519]
@@ -13,7 +11,7 @@
 	  [naclj.jose]
 	  [naclj.encode-util :refer :all]
 	  [naclj.fixture :as f]
-	  [clojure.tools.namespace.repl :refer [refresh]]
+	  ;[clojure.tools.namespace.repl :refer [refresh]]
 	  ;[clj-ns-browser.sdoc :as b]
 	  [clojure.java.io :refer [reader writer]]
 	  ))
