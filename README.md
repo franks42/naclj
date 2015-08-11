@@ -29,7 +29,7 @@ Unfortunately, the development on Caesium seem to have stalled. Then I tried to 
   * https://github.com/jedisct1/libsodium
 * Kalium (Bruno Oliveira's comprehensive Java binding to the Networking and Cryptography (NaCl) library with the awesomeness of libsodium)
   * https://github.com/abstractj/kalium
-* Caesium (lvm's Clojure bindings to Kalium's Java interfaces and implementation - unfortunately stalled after great start...)
+* Caesium (lvh's Clojure bindings to Kalium's Java interfaces and implementation - unfortunately stalled after great start...)
   * https://github.com/lvh/caesium
 * TweetNacl in Java (Tom Zhou amazing effort to have most of the NaCl functionality in a single pure java file.)
   * https://github.com/InstantWebP2P/tweetnacl-java
