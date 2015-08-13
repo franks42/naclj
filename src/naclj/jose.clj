@@ -19,18 +19,26 @@
 
 (extend-type TCurve25519PrivateKey
   IJoseRepresentation
-    (jose [this] {"kty" "EC", "crv" "curve25519", "k" (=>base64url-str (=>bytes this)),
-                  "use" "dec", "kid" (=>base64url-str (=>bytes (public-key this)))}))
+    (jose [this] {"kty" "EC", 
+                  "crv" "curve25519", 
+                  "k" (=>base64url-str (=>bytes this)),
+                  "use" "dec", 
+                  "kid" (=>base64url-str (=>bytes (public-key this)))}))
 
 (extend-type TCurve25519PublicKey
   IJoseRepresentation
-    (jose [this] {"kty" "EC", "crv" "curve25519", "k" (=>base64url-str (=>bytes this)),
-                  "use" "enc", "kid" (=>base64url-str (=>bytes this))}))
+    (jose [this] {"kty" "EC", 
+                  "crv" "curve25519", 
+                  "k" (=>base64url-str (=>bytes this)),
+                  "use" "enc", 
+                  "kid" (=>base64url-str (=>bytes this))}))
 
 (extend-type TCurve25519DHKey
   IJoseRepresentation
-    (jose [this] {"kty" "oct", "k" (=>base64url-str (=>bytes this)),
-                  "kid" (=>base64url-str ((hp/make-message-digester :sodium :sha256) (=>bytes this)))}))
+    (jose [this] {"kty" "oct", 
+                  "k" (=>base64url-str (=>bytes this)),
+                  "kid" (=>base64url-str ((hp/make-message-digester :sodium :sha256) 
+                                           (=>bytes this)))}))
 
 
 

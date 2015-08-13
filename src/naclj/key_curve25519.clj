@@ -5,6 +5,7 @@
     )
 	(:require 
 	  [naclj.key-protocol :refer :all]
+    [naclj.uri-util :refer :all]
 	  [naclj.encode-util :refer :all]
 	  [naclj.fixture :as f]
 	  [clojure.java.io :refer [reader writer]]

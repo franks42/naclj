@@ -160,45 +160,6 @@
       (let [decoder (java.util.Base64/getUrlDecoder)]
         (.decode decoder bs))))
 
-
-(defprotocol IUriIdentify
-  "Protocol to standardize the returning of a URI instance uniquely identifying the object."
-  (uri [this]
-    "Returns a URI instance uniquely identifying the object."))
-
-(defprotocol IUrnParser
-  "Set of functions to facilitate the parsing and interpretation of URNs.
-  All functions work both on URI instances as well as uri-like strings."
-  (urn? [this]
-    "Returns whether or not this URI is designated as a URN with a \"urn:\" prefix.
-    e.g.: (urn? \"urn:abc:def\" => true
-          (urn? \"http://xyz.com/def\" => false")
-  (namespace-name [this]
-    "Returns the string of the namespace of this URN, i.e. the string fragment 
-    after \"urn:\" and before the first \":\" separator, or nil.
-    e.g.: (namespace-name \"urn:abc:def\" => \"abc\"
-          (namespace-name \"http://xyz.com/def\" => nil")
-  (sub-namespace-names [this]
-    "Returns the namespace and sub-namespace names as a sequence (vector) of strings, or nil.
-    e.g.: (sub-namespace-names \"urn:abc:def\" => [\"abc\"]
-          (sub-namespace-names \"urn:abc:def:ghi:jkl\" => [\"abc\" \"def\" \"ghi\" ]")
-  (namespace-specific-string [this]
-    "Returns the namespace specific string, i.e. the string fragment after the last 
-    sub-namespace designator, or nil. Note that empty string may be returned for valid 
-    urn without a namespace specific string.
-    e.g.: (namespace-specific-string \"urn:abc:def\" => \"def\"
-          (namespace-specific-string \"urn:xyz:\" => \"\"
-          (namespace-specific-string \"urn:abc:def:ghi:jkl#mno\" => \"jkl#mno\"")
-  )
-
-; urn-regex: "^urn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\-.:=@;$_!*'%/?#]+$"
-; urn-regex: "^urn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\-.=@;$_!*'%/?#]+$"
-; urn-regex: "^urn:([a-z0-9][a-z0-9-]{0,31}:)+[a-z0-9()+,\-.=@;$_!*'%/?#]+$"
-; urn-regex: "^urn:(([a-zA-Z0-9][a-zA-Z0-9-]{0,31}:)+)([a-zA-Z0-9()+,\-.=@;$_!*'%/?#]*)$"
-;   "^(?i)^urn(?-i):[a-z]{1,31}(:([\\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)+(\\?\\w+(=([\\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)?(&\\w+(=([\\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)?)*)?\\*?$"
-;   "^(?i)^urn(?-i):[a-z]{1,31}(:([\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)+(\?\w+(=([\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)?(&\w+(=([\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)?)*)?\*?$"
-;   "^(?i)^urn(?-i):[a-z]{1,31}(:([\\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)+(\\?\\w+(=([\\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)?(&\\w+(=([\\-a-zA-Z0-9/]|%[0-9a-fA-F]{2})*)?)*)?\\*?$"
-
 ;;;
 
 (defprotocol IJoseRepresentation

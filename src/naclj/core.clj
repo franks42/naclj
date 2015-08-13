@@ -11,7 +11,7 @@
 	  [naclj.jose]
 	  [naclj.encode-util :refer :all]
 	  [naclj.fixture :as f]
-	  ;[clojure.tools.namespace.repl :refer [refresh]]
+	  [clojure.tools.namespace.repl :refer [refresh]]
 	  ;[clj-ns-browser.sdoc :as b]
 	  [clojure.java.io :refer [reader writer]]
 	  ))
