@@ -81,6 +81,9 @@
        (or (= this that) 
            (equal? (private-key this) (private-key that)))
        false))
+  IUriIdentify
+    (uri [this]
+      (java.net.URI. (str "urn:nacl:kp:curve25519:" (=>base64url-str (public-key this)))))
   )
 
 (extend-type TCurve25519PrivateKey
@@ -106,7 +109,8 @@
       (assert (public-key? a-public-key) 
         "DH Key derivation - Second key is no public key.")
       (assert (= (algorithm this) (algorithm a-public-key)) 
-        (str "DH Key derivation - Keys are not both of the same type: " (algorithm this) " vs " (algorithm a-public-key)))
+        (str "DH Key derivation - Keys are not both of the same type: " 
+             (algorithm this) " vs " (algorithm a-public-key)))
       (let [k-bs (byte-array beforenmbytes)
             ;; use the xor of the 2 public keys as the identifier for the dh-key
             dh-id-xor (byte-array (map bit-xor (=>bytes! a-public-key) 
@@ -134,8 +138,11 @@
     (=>base64url [this] (=>base64url (:private-key-bs this)))
     (=>base64url-str [this] (=>base64url-str (:private-key-bs this)))
   IBytesEncode
-  (=>bytes [this] (=>bytes (:private-key-bs this)))
-  (=>bytes! [this] (=>bytes! (:private-key-bs this)))
+    (=>bytes [this] (=>bytes (:private-key-bs this)))
+    (=>bytes! [this] (=>bytes! (:private-key-bs this)))
+  IUriIdentify
+    (uri [this]
+      (java.net.URI. (str "urn:nacl:sk:curve25519:" (=>base64url-str (public-key this)))))
   )
 
 (extend-type TCurve25519PublicKey
@@ -167,7 +174,7 @@
   (=>bytes! [this] (=>bytes! (:public-key-bs this)))
   IUriIdentify
     (uri [this]
-      (java.net.URI. (str "urn:nacl:pk:curve25519:" (=>base64url-str (=>bytes this)))))
+      (java.net.URI. (str "urn:nacl:pk:curve25519:" (=>base64url-str this))))
   )
 
 (extend-type TCurve25519DHKey

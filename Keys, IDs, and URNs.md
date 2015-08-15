@@ -91,13 +91,27 @@ By parsing the urn, the (sub-)namespace names and their standardized meaning, sh
 
 The following urn schema are used:
 
-* curve25519 and ed25519 public, private keys and key-pairs:
+* The urn for a public key will have a first sub-namespace name of "pk".
+* The urn for a private key will have a first sub-namespace name of "sk".
+* The urn for a private&public key-pair will have a first sub-namespace name of "kp".
+* The urn for a public or private key or key-pair will have a second sub-namespace name of that designates the algorithm, like "curve25519" or "ed25519".
+* The urn for a public key, private key and key-pair for the curve25519 and ed25519 ECs, will all have a namespace string with a value of the base64url encode bytes of the public key.
+
+For example:
+
+* URNs for curve25519 and ed25519 public, private keys and key-pairs:
   * "urn:nacl:pk:curve25519:KSSPKKWRrSaZ5wL3PCDV1jE-31McqaBMq6Tbn_BQoCw"
+  * "urn:nacl:sk:curve25519:KSSPKKWRrSaZ5wL3PCDV1jE-31McqaBMq6Tbn_BQoCw"
+  * "urn:nacl:kp:curve25519:KSSPKKWRrSaZ5wL3PCDV1jE-31McqaBMq6Tbn_BQoCw"
   * "urn:nacl:pk:ed25519:3D5G6BsTe9GCJz0bm_Z5b_N8NTIpcb7tAeUv4MnBGIU"
-* generic secret/symmetric keys:
+  * "urn:nacl:sk:ed25519:3D5G6BsTe9GCJz0bm_Z5b_N8NTIpcb7tAeUv4MnBGIU"
+  * "urn:nacl:kp:ed25519:3D5G6BsTe9GCJz0bm_Z5b_N8NTIpcb7tAeUv4MnBGIU"
+* URN for generic secret/symmetric keys:
   * "urn:nacl:k:hash:blake2bp:V2jyhd8tX-19vpEhyrDzIHgUYyDA5MS1Qi71iw1SUP0"
 
 
+
+The urn for a (symmetric) key will have a first sub-namespace name of "k".
 
 ## References
 

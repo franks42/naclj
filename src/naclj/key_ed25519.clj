@@ -67,6 +67,9 @@
        (or (= this that) 
            (equal? (private-key this) (private-key that)))
        false))
+  IUriIdentify
+    (uri [this]
+      (java.net.URI. (str "urn:nacl:sk:ed25519:" (=>base64url-str (public-key this)))))
   )
 
 (extend-type TEd25519PrivateKey
@@ -104,7 +107,7 @@
   (=>bytes! [this] (=>bytes! (:private-key-bs this)))
   IUriIdentify
     (uri [this]
-      (java.net.URI. (str "urn:nacl:pk:ed25519:" (=>base64url-str (=>bytes (public-key this))))))
+      (java.net.URI. (str "urn:nacl:sk:ed25519:" (=>base64url-str (public-key this)))))
   )
 
 (extend-type TEd25519PublicKey
@@ -128,7 +131,7 @@
   (=>bytes! [this] (=>bytes! (:public-key-bs this)))
   IUriIdentify
     (uri [this]
-      (java.net.URI. (str "urn:nacl:pk:ed25519:" (=>base64url-str (=>bytes this)))))
+      (java.net.URI. (str "urn:nacl:pk:ed25519:" (=>base64url-str this))))
   )
 
 
