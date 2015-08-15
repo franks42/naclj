@@ -167,7 +167,7 @@
   (=>bytes! [this] (=>bytes! (:public-key-bs this)))
   IUriIdentify
     (uri [this]
-      (java.net.URI. (str "urn:public-key:curve25519:base64url:" (=>base64url-str (=>bytes this)))))
+      (java.net.URI. (str "urn:nacl:pk:curve25519:" (=>base64url-str (=>bytes this)))))
   )
 
 (extend-type TCurve25519DHKey
@@ -189,7 +189,7 @@
   (=>bytes! ([this] (=>bytes! (:key-bs this))))
   IUriIdentify
     (uri [this]
-      (java.net.URI. (str "urn:dh-key:curve25519-xor:base64url:" 
+      (java.net.URI. (str "urn:nacl:dh-key:curve25519-xor:" 
                           (=>base64url-str (=>bytes (:id-xor this))))))
   )
 

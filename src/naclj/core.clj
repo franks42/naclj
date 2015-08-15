@@ -10,6 +10,7 @@
 	  [naclj.hash-sha512]
 	  [naclj.jose]
 	  [naclj.encode-util :refer :all]
+	  [naclj.uri-util :refer :all]
 	  [naclj.fixture :as f]
 	  [clojure.tools.namespace.repl :refer [refresh]]
 	  ;[clj-ns-browser.sdoc :as b]

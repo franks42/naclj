@@ -102,6 +102,9 @@
   IBytesEncode
   (=>bytes [this] (=>bytes (:private-key-bs this)))
   (=>bytes! [this] (=>bytes! (:private-key-bs this)))
+  IUriIdentify
+    (uri [this]
+      (java.net.URI. (str "urn:nacl:pk:ed25519:" (=>base64url-str (=>bytes (public-key this))))))
   )
 
 (extend-type TEd25519PublicKey
@@ -125,7 +128,7 @@
   (=>bytes! [this] (=>bytes! (:public-key-bs this)))
   IUriIdentify
     (uri [this]
-      (java.net.URI. (str "urn:public-key:ed25519:base64url:" (=>base64url-str (=>bytes this)))))
+      (java.net.URI. (str "urn:nacl:pk:ed25519:" (=>base64url-str (=>bytes this)))))
   )
 
 
