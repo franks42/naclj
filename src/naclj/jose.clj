@@ -21,7 +21,7 @@
   IJoseRepresentation
     (jose [this] {"kty" "EC", 
                   "crv" "curve25519", 
-                  "k" (=>base64url-str (=>bytes this)),
+                  "sk" (=>base64url-str (=>bytes this)),
                   "use" "dec", 
                   "kid" (=>base64url-str (=>bytes (public-key this)))}))
 
@@ -29,7 +29,7 @@
   IJoseRepresentation
     (jose [this] {"kty" "EC", 
                   "crv" "curve25519", 
-                  "k" (=>base64url-str (=>bytes this)),
+                  "pk" (=>base64url-str (=>bytes this)),
                   "use" "enc", 
                   "kid" (=>base64url-str (=>bytes this))}))
 

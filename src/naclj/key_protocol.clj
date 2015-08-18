@@ -45,6 +45,14 @@
   (dh-key [this pub-priv-key])
   )
 
+(defprotocol IPKeyEdToCurve25519
+  "Interface that returns the derived Diffie-Hellman symmetric key from the pub and priv keys."
+  (curve25519-public-key [this]))
+
+(defprotocol ISKeyEdToCurve25519
+  "Interface that returns the derived Diffie-Hellman symmetric key from the pub and priv keys."
+  (curve25519-private-key [this]))
+
 (defprotocol IKeyInfo
   "Provide some key properties."
   (key-length [this])
