@@ -12,10 +12,10 @@
 	  ))
 
 ;; sodium constants
-(def seedbytes (.crypto_box_curve25519xsalsa20poly1305_seedbytes (NaCl/sodium)))
-(def publickeybytes (.crypto_box_curve25519xsalsa20poly1305_publickeybytes (NaCl/sodium)))
-(def secretkeybytes (.crypto_box_curve25519xsalsa20poly1305_secretkeybytes (NaCl/sodium)))
-(def beforenmbytes (.crypto_box_curve25519xsalsa20poly1305_beforenmbytes (NaCl/sodium)))
+(def curve25519-seedbytes (.crypto_box_curve25519xsalsa20poly1305_seedbytes (NaCl/sodium)))
+(def curve25519-publickeybytes (.crypto_box_curve25519xsalsa20poly1305_publickeybytes (NaCl/sodium)))
+(def curve25519-secretkeybytes (.crypto_box_curve25519xsalsa20poly1305_secretkeybytes (NaCl/sodium)))
+(def curve25519-beforenmbytes (.crypto_box_curve25519xsalsa20poly1305_beforenmbytes (NaCl/sodium)))
 (def noncebytes (.crypto_box_curve25519xsalsa20poly1305_noncebytes (NaCl/sodium)))
 (def zerobytes (.crypto_box_curve25519xsalsa20poly1305_zerobytes (NaCl/sodium)))
 (def boxzerobytes (.crypto_box_curve25519xsalsa20poly1305_boxzerobytes (NaCl/sodium)))
@@ -44,8 +44,8 @@
     (make-key-pair :sodium :curve25519 (->TCurve25519PrivateKey private-key))
     (if (nil? private-key)
       ;; create a new key-pair from scratch
-      (let [sk (byte-array secretkeybytes)
-            pk (byte-array publickeybytes)]
+      (let [sk (byte-array curve25519-secretkeybytes)
+            pk (byte-array curve25519-publickeybytes)]
         (.crypto_box_curve25519xsalsa20poly1305_keypair
           (NaCl/sodium)
           pk
@@ -96,7 +96,7 @@
     (algorithm [this] "curve25519")
   IKeyPair
     (key-pair [this] 
-      (let [pk (byte-array publickeybytes)]
+      (let [pk (byte-array curve25519-publickeybytes)]
         (.crypto_scalarmult_curve25519_base 
           (NaCl/sodium) 
           pk 
@@ -111,7 +111,7 @@
       (assert (= (algorithm this) (algorithm a-public-key)) 
         (str "DH Key derivation - Keys are not both of the same type: " 
              (algorithm this) " vs " (algorithm a-public-key)))
-      (let [k-bs (byte-array beforenmbytes)
+      (let [k-bs (byte-array curve25519-beforenmbytes)
             ;; use the xor of the 2 public keys as the identifier for the dh-key
             dh-id-xor (byte-array (map bit-xor (=>bytes! a-public-key) 
                                                (=>bytes! (public-key this))))
@@ -161,7 +161,7 @@
   IEqual
     (equal? [this that] (equal? (=>bytes! this) (=>bytes! that)))
   IKeyInfo
-    (key-length [this] publickeybytes)
+    (key-length [this] curve25519-publickeybytes)
     (algorithm [this] "curve25519")
   IHexEncode
     (=>hex [this] (=>hex (:public-key-bs this)))
@@ -204,6 +204,8 @@
 (defmethod key-pair? TCurve25519KeyPair [o] true)
 (defmethod private-key? TCurve25519PrivateKey [o] true)
 (defmethod public-key? TCurve25519PublicKey [o] true)
+(defmethod dh-public-key? TCurve25519PublicKey [o] true)
+(defmethod dh-private-key? TCurve25519PrivateKey [o] true)
 
 (defn box-curve25519xsalsa20poly1305 
   ([sk pk msg] (box-curve25519xsalsa20poly1305 sk pk msg nil))

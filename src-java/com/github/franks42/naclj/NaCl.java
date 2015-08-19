@@ -123,17 +123,11 @@ public class NaCl {
 
 // HMACSHA512256
 
-        public static final int HMACSHA512256_BYTES = 32;
-
-        public static final int HMACSHA512256_KEYBYTES = 32;
-
         public int crypto_auth_hmacsha512256(@Out byte[] mac, @In byte[] message, @u_int64_t long sizeof, @In byte[] key);
 
         public int crypto_auth_hmacsha512256_verify(@In byte[] mac, @In byte[] message, @u_int64_t long sizeof, @In byte[] key);
 
 // SHA256
-
-        public static final int SHA256BYTES = 32;
 
         public int crypto_hash_sha256(@Out byte[] buffer, @In byte[] message, @u_int64_t long sizeof);
         
@@ -144,8 +138,6 @@ public class NaCl {
 
 // SHA512
 
-        public static final int SHA512BYTES = 64;
-
         public int crypto_hash_sha512(@Out byte[] buffer, @In byte[] message, @u_int64_t long sizeof);
 
         public int crypto_hash_sha512_init(@Out byte[] state); 
@@ -154,68 +146,70 @@ public class NaCl {
 
 // BLAKE2B
 
-        public static final int BLAKE2B_OUTBYTES = 64;
         public int crypto_generichash_blake2b(@Out byte[] buffer, @u_int64_t long outLen,
                                               @In byte[] message, @u_int64_t long messageLen,
                                               @In byte[] key, @u_int64_t long keyLen);
-        public int crypto_generichash_blake2b_salt_personal(@Out byte[] buffer, @u_int64_t long outLen,
-                                                            @In byte[] message, @u_int64_t long messageLen,
-                                                            @In byte[] key,  @u_int64_t long keyLen,
-                                                            @In byte[] salt,
-                                                            @In byte[] personal);
+                                              
+        public int crypto_generichash_blake2b_salt_personal(
+                                        @Out byte[] buffer, @u_int64_t long outLen,
+                                        @In byte[] message, @u_int64_t long messageLen,
+                                        @In byte[] key,  @u_int64_t long keyLen,
+                                        @In byte[] salt,
+                                        @In byte[] personal);
 
         public int crypto_generichash_blake2b_init(@Out byte[] state, 
                                                    @In byte[] key, @u_int64_t long keylen, 
                                                    @u_int64_t long outlen);
+                                                   
         public int crypto_generichash_blake2b_init_salt_personal(@Out byte[] state, 
                                                    @In byte[] key, @u_int64_t long keylen, 
                                                    @u_int64_t long outlen,
                                                    @In byte[] salt, @In byte[] personal);
+                                                   
         public int crypto_generichash_blake2b_update(byte[] state,
                                                      @In byte[] in, @u_int64_t long inlen);
+                                                     
         public int crypto_generichash_blake2b_final(byte[] state,
                                                     @Out byte[] out, @u_int64_t long outlen);
 
 
 // CURVE25519
 
-        public static final int PUBLICKEY_BYTES = 32;
-        public static final int SECRETKEY_BYTES = 32;
-
-        public int crypto_box_curve25519xsalsa20poly1305_keypair(@Out byte[] publicKey, @Out byte[] secretKey);
-
-        // int crypto_scalarmult_base(unsigned char *q, const unsigned char *n)
-        // public int crypto_scalarmult_base(@Out byte[] publicKey, @In byte[] secretKey);
-        public int crypto_scalarmult_curve25519_base(@Out byte[] publicKey, @In byte[] secretKey);
+        public int crypto_box_curve25519xsalsa20poly1305_seed_keypair(@Out byte[] publicKey,
+                                                                      @Out byte[] secretKey,
+                                                                      @In byte[] seed);
         
-        // int crypto_box_beforenm(unsigned char *k, const unsigned char *pk, const unsigned char *sk)
-        // int crypto_box_curve25519xsalsa20poly1305_beforenm(
-        //            unsigned char *k, const unsigned char *pk, const unsigned char *sk);
-        public int crypto_box_beforenm(@Out byte[] k, @In byte[] publicKey, @In byte[] secretKey);
-        public int crypto_box_curve25519xsalsa20poly1305_beforenm(@Out byte[] k, @In byte[] publicKey, @In byte[] secretKey);
+        public int crypto_box_curve25519xsalsa20poly1305_keypair(@Out byte[] publicKey, 
+                                                                 @Out byte[] secretKey);
+
+        public int crypto_scalarmult_curve25519_base(@Out byte[] publicKey, 
+                                                     @In byte[] secretKey);
+        
+        public int crypto_box_curve25519xsalsa20poly1305_beforenm(@Out byte[] k, 
+                                                                  @In byte[] publicKey, 
+                                                                  @In byte[] secretKey);
 
 // crypto_box
         
-        public static final int NONCE_BYTES = 24;
-        public static final int ZERO_BYTES = 32;
-        public static final int BOXZERO_BYTES = 16;
-
         public void randombytes(@Out byte[] buffer, @u_int64_t long size);
 
-        public int crypto_box_curve25519xsalsa20poly1305(@Out byte[] ct, @In byte[] msg, @u_int64_t long length, @In byte[] nonce,
-                                                         @In byte[] publicKey, @In byte[] privateKey);
+        public int crypto_box_curve25519xsalsa20poly1305(@Out byte[] ct, 
+                                                         @In byte[] msg, @u_int64_t long length, 
+                                                         @In byte[] nonce,
+                                                         @In byte[] publicKey, 
+                                                         @In byte[] privateKey);
 
-        public int crypto_box_curve25519xsalsa20poly1305_open(@Out byte[] message, @In byte[] ct, @u_int64_t long length,
-                                                              @In byte[] nonce, @In byte[] publicKey, @In byte[] privateKey);
+        public int crypto_box_curve25519xsalsa20poly1305_open(@Out byte[] message, 
+                                                              @In byte[] ct, @u_int64_t long length,
+                                                              @In byte[] nonce, 
+                                                              @In byte[] publicKey, 
+                                                              @In byte[] privateKey);
 
 // crypto_secretbox
 
-        public static final int SCALAR_BYTES = 32;
-
-        public int crypto_scalarmult_curve25519(@Out byte[] result, @In byte[] intValue, @In byte[] point);
-
-        public static final int XSALSA20_POLY1305_SECRETBOX_KEYBYTES = 32;
-        public static final int XSALSA20_POLY1305_SECRETBOX_NONCEBYTES = 24;
+        public int crypto_scalarmult_curve25519(@Out byte[] result, 
+                                                @In byte[] intValue, 
+                                                @In byte[] point);
 
         int crypto_secretbox_xsalsa20poly1305(@Out byte[] ct, 
                                               @In byte[] msg, @u_int64_t long length, 

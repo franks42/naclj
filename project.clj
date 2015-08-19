@@ -8,6 +8,7 @@
   	;[commons-codec/commons-codec "1.10"]
   	[com.cognitect/transit-clj "0.8.281"]
   	[com.github.jnr/jnr-ffi "2.0.3"]
+  	[org.clojure/data.json "0.2.6"]
 		]
 	:java-source-paths ["src-java"]
   :dev-dependencies [[clj-ns-browser "1.3.2-SNAPSHOT"]

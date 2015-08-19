@@ -73,6 +73,8 @@
 (defmulti verifying-key? type)
 (defmulti decryption-key? type)
 (defmulti encryption-key? type)
+(defmulti dh-public-key? type)
+(defmulti dh-private-key? type)
 
 (defmethod key-pair? :default [o] false)
 (defmethod private-key? :default [o] false)
@@ -81,6 +83,8 @@
 (defmethod verifying-key? :default [o] false)
 (defmethod decryption-key? :default [o] false)
 (defmethod encryption-key? :default [o] false)
+(defmethod dh-public-key? :default [o] false)
+(defmethod dh-private-key? :default [o] false)
 
 ;;;
 

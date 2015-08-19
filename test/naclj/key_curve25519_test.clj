@@ -36,6 +36,8 @@
     (is (and (key-pair? kp-alice) (key-pair? kp-bob)))
     (is (and (public-key? pk-alice) (public-key? pk-bob)))
     (is (and (private-key? sk-alice) (private-key? sk-bob)))
+    (is (and (dh-public-key? pk-alice) (dh-public-key? pk-bob)))
+    (is (and (dh-private-key? sk-alice) (dh-private-key? sk-bob)))
     (is (and (pair? pk-alice sk-alice) (pair? sk-alice pk-alice)))
     (is (and (not (pair? pk-alice sk-bob)) (not (pair? sk-bob pk-alice))))
     (is (and (equal? kp-alice kp-alice2) (equal? kp-alice kp-alice3) (not (equal? kp-alice kp-bob))))
@@ -63,9 +65,9 @@
          pk-bob (public-key kp-bob)
          dh (dh-key kp-alice pk-bob)
          ]
-    (is (= (key-length sk-alice) naclj.key-curve25519/secretkeybytes))
-    (is (= (key-length pk-alice) naclj.key-curve25519/publickeybytes))
-    (is (= (key-length dh) naclj.key-curve25519/beforenmbytes))
+    (is (= (key-length sk-alice) naclj.key-curve25519/curve25519-secretkeybytes))
+    (is (= (key-length pk-alice) naclj.key-curve25519/curve25519-publickeybytes))
+    (is (= (key-length dh) naclj.key-curve25519/curve25519-beforenmbytes))
     (is (= "curve25519" (algorithm kp-alice) (algorithm pk-alice) (algorithm sk-alice)))
     
     )))

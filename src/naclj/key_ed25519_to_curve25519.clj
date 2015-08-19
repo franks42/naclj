@@ -1,4 +1,5 @@
 (ns naclj.key-ed25519-to-curve25519
+  "Conversion functions from ed25519 to curve25519 functions implemented as protocol extensions of TEd25519* records."
 	(:require 
 	  [naclj.key-protocol :refer :all]
 	  [naclj.encode-util :refer :all]
@@ -27,7 +28,7 @@
   ISKeyEdToCurve25519
     (curve25519-private-key
       [this]
-      (let [curve25519_sk (byte-array secretkeybytes)
+      (let [curve25519_sk (byte-array curve25519-secretkeybytes)
             r (.crypto_sign_ed25519_sk_to_curve25519 (NaCl/sodium)
                 curve25519_sk (=>bytes! this))]
         (when r (map->TCurve25519PrivateKey {:private-key-bs curve25519_sk})))))
@@ -36,24 +37,7 @@
   IPKeyEdToCurve25519
     (curve25519-public-key 
       [this]
-      (let [curve25519_pk (byte-array publickeybytes)
+      (let [curve25519_pk (byte-array curve25519-publickeybytes)
             r (.crypto_sign_ed25519_pk_to_curve25519 (NaCl/sodium)
                 curve25519_pk (=>bytes! this))]
         (when r (map->TCurve25519PublicKey {:public-key-bs curve25519_pk})))))
-
-;;;
-
-;naclj.core=> (require 'naclj.key-ed25519-to-curve25519)
-;nil
-;naclj.core=> (def kp-a (kp/make-key-pair :sodium :ed25519))
-;#'naclj.core/kp-a
-;naclj.core=> kp-a
-;#naclj.key_ed25519.TEd25519KeyPair{:private-key #naclj.key_ed25519.TEd25519PrivateKey{:private-key-bs #object["[B" 0x22d68bef "[B@22d68bef"]}, :public-key #naclj.key_ed25519.TEd25519PublicKey{:public-key-bs #object["[B" 0xa9c9a89 "[B@a9c9a89"]}}
-;naclj.core=> (kp/curve25519-public-key kp-a)
-;#naclj.key_curve25519.TCurve25519PublicKey{:public-key-bs #object["[B" 0x67a5560e "[B@67a5560e"]}
-;naclj.core=> (kp/curve25519-private-key kp-a)
-;#naclj.key_curve25519.TCurve25519PrivateKey{:private-key-bs #object["[B" 0x7488c244 "[B@7488c244"]}
-;naclj.core=> (kp/pair? (kp/curve25519-public-key kp-a) (kp/curve25519-private-key kp-a))
-;true
-;naclj.core=>
-

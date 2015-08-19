@@ -16,7 +16,7 @@
 
 ;; sodium constants
 (def noncebytes (.crypto_box_curve25519xsalsa20poly1305_noncebytes (NaCl/sodium)))
-(def beforenmbytes (.crypto_box_curve25519xsalsa20poly1305_beforenmbytes (NaCl/sodium)))
+(def curve25519-beforenmbytes (.crypto_box_curve25519xsalsa20poly1305_beforenmbytes (NaCl/sodium)))
 
 ;;;
 
@@ -102,7 +102,7 @@
 
 (defmethod make-key [:sodium :xsalsa20poly1305]
   [provider function & {:keys [] :as xs}]
-  (map->TXsalsa20Poly1305Key :key-bs (make-random-bytes beforenmbytes)
+  (map->TXsalsa20Poly1305Key :key-bs (make-random-bytes curve25519-beforenmbytes)
                              :function :xsalsa20poly1305
                              :provider :sodium))
 
