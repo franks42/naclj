@@ -1,4 +1,4 @@
-(ns naclj.jose
+(ns naclj.key-jose
 	(:require 
 	  [naclj.key-protocol :refer :all]
 	  [naclj.hash-protocol :as hp]

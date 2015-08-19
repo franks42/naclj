@@ -2,7 +2,6 @@
 	(:import 
 	  (com.github.franks42.naclj NaCl)
 	  (com.github.franks42.naclj NaCl$Sodium)
-	  (jnr.ffi.byref.LongLongByReference)
 	  (java.net.URI)
     )
 	(:require 
@@ -31,12 +30,24 @@
 
 (defmethod make-key-pair [:sodium :ed25519]
   ;; make key-pair from either a private-key object, a private-key-bs byte-array,
-  ;; or from scratch.
+  ;; a seed (byte-array of ed25519-seedbytes), or from scratch.
   ;; A TEd25519KeyPair is returned.
-  [provider function & {:keys [kid private-key seed] :as xs}]
-  (if (byte-array? private-key)
-    (make-key-pair :sodium :curve25519 (->TEd25519PrivateKey private-key))
-    (if (nil? private-key)
+  [provider function & {:keys [private-key seed] :as xs}]
+  (if seed
+    ;; create a new key-pair from seed
+    (let [sk (byte-array ed25519-secretkeybytes)
+          pk (byte-array ed25519-publickeybytes)]
+      (.crypto_sign_ed25519_seed_keypair
+        (NaCl/sodium)
+        pk
+        sk
+        seed)
+      (->TEd25519KeyPair (->TEd25519PrivateKey sk) (->TEd25519PublicKey pk)))
+    (if private-key
+      (if (byte-array? private-key)
+        (make-key-pair :sodium :curve25519 :private-key (->TEd25519PrivateKey private-key))
+        (when (private-key? private-key)
+          (key-pair private-key)))
       ;; create a new key-pair from scratch
       (let [sk (byte-array ed25519-secretkeybytes)
             pk (byte-array ed25519-publickeybytes)]
@@ -44,10 +55,7 @@
           (NaCl/sodium)
           pk
           sk)
-        (->TEd25519KeyPair (->TEd25519PrivateKey sk) (->TEd25519PublicKey pk)))
-      (if (private-key? private-key)
-        (key-pair private-key)
-        nil))))
+        (->TEd25519KeyPair (->TEd25519PrivateKey sk) (->TEd25519PublicKey pk))))))
 
 ;;;
 
@@ -141,3 +149,11 @@
 (defmethod signing-key? TEd25519PrivateKey [o] true)
 (defmethod verifying-key? TEd25519PublicKey [o] true)
 
+(defn seed-from-ed25519-sk [sk]
+  (let [seed (byte-array ed25519-seedbytes)]
+;    int crypto_sign_ed25519_sk_to_seed(@Out byte[] seed, @In byte[] sk);
+    (.crypto_sign_ed25519_sk_to_seed
+        (NaCl/sodium)
+        seed
+        (=>bytes sk))
+      seed))

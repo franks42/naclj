@@ -8,7 +8,6 @@
 	(:import 
 	  (com.github.franks42.naclj NaCl)
 	  (com.github.franks42.naclj NaCl$Sodium)
-	  (jnr.ffi.byref.LongLongByReference)
 	  (java.net.URI)
 	  ;; now import each record - note "_" because of java interop-crap...:-(
 	  [naclj.key_ed25519 TEd25519KeyPair TEd25519PrivateKey TEd25519PublicKey]

@@ -35,14 +35,46 @@
 
 ;;;
 
+;(defmethod make-key-pair [:sodium :curve25519]
+;  ;; make key-pair from either a private-key object, a private-key-bs byte-array,
+;  ;; or from scratch.
+;  ;; A TCurve25519KeyPair is returned.
+;  [provider function & {:keys [kid private-key] :as xs}]
+;  (if (byte-array? private-key)
+;   (make-key-pair :sodium :curve25519 :private-key (->TCurve25519PrivateKey private-key))
+;    (if (nil? private-key)
+;      ;; create a new key-pair from scratch
+;      (let [sk (byte-array curve25519-secretkeybytes)
+;            pk (byte-array curve25519-publickeybytes)]
+;        (.crypto_box_curve25519xsalsa20poly1305_keypair
+;          (NaCl/sodium)
+;          pk
+;          sk)
+;        (->TCurve25519KeyPair (->TCurve25519PrivateKey sk) (->TCurve25519PublicKey pk)))
+;      (if (private-key? private-key)
+;        (key-pair private-key)
+;        nil))))
+
 (defmethod make-key-pair [:sodium :curve25519]
   ;; make key-pair from either a private-key object, a private-key-bs byte-array,
-  ;; or from scratch.
+  ;; a seed (byte-array of curve25519-seedbytes), or from scratch.
   ;; A TCurve25519KeyPair is returned.
-  [provider function & {:keys [kid private-key] :as xs}]
-  (if (byte-array? private-key)
-    (make-key-pair :sodium :curve25519 (->TCurve25519PrivateKey private-key))
-    (if (nil? private-key)
+  [provider function & {:keys [private-key seed] :as xs}]
+  (if seed
+    ;; create a new key-pair from seed
+    (let [sk (byte-array curve25519-secretkeybytes)
+          pk (byte-array curve25519-publickeybytes)]
+      (.crypto_box_curve25519xsalsa20poly1305_seed_keypair
+        (NaCl/sodium)
+        pk
+        sk
+        seed)
+      (->TCurve25519KeyPair (->TCurve25519PrivateKey sk) (->TCurve25519PublicKey pk)))
+    (if private-key
+      (if (byte-array? private-key)
+        (make-key-pair :sodium :curve25519 :private-key (->TCurve25519PrivateKey private-key))
+        (when (private-key? private-key)
+          (key-pair private-key)))
       ;; create a new key-pair from scratch
       (let [sk (byte-array curve25519-secretkeybytes)
             pk (byte-array curve25519-publickeybytes)]
@@ -50,12 +82,7 @@
           (NaCl/sodium)
           pk
           sk)
-        (->TCurve25519KeyPair (->TCurve25519PrivateKey sk) (->TCurve25519PublicKey pk)))
-      (if (private-key? private-key)
-        (key-pair private-key)
-        nil))))
-
-
+        (->TCurve25519KeyPair (->TCurve25519PrivateKey sk) (->TCurve25519PublicKey pk))))))
 
 (defmethod make-key [:sodium :curve25519]
   [provider function & {:keys [key-pair private-key public-key] :as xs}]
