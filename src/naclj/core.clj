@@ -3,6 +3,7 @@
 	  [naclj.hash-protocol :as hp]
 	  [naclj.key-protocol :as kp]
 	  [naclj.key-curve25519]
+	  [naclj.sodium-random]
 	  [naclj.key-ed25519]
 	  [naclj.signature-ed25519 :as sig]
 	  [naclj.hash-blake2b]

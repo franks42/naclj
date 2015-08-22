@@ -3,8 +3,6 @@
 	(:import 
 	  (java.util Arrays Base64)
 	  (org.apache.commons.codec.binary)
-	  (com.github.franks42.naclj NaCl)
-	  (com.github.franks42.naclj NaCl$Sodium)
     ))
 
 ;; helper fn
@@ -166,20 +164,4 @@
   "Returning a JOSE representation of the object."
   (jose [this]))
 
-
-;;----
-
-(defn make-random-bytes
-  "Returns a new byte-array of size n filled with random values."
-  [n] 
-  (let [bs (byte-array n)]
-    (.randombytes (NaCl/sodium) bs n)
-    bs))
-
-(defn make-random-bytes!
-  "Fills the whole byte array bs with random values.
-  Changes the provided array content in-place.
-  Returns the same changed array."
-  [bs] 
-  (.randombytes (NaCl/sodium) bs (count bs))
-  bs)
+;;;

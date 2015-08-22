@@ -8,8 +8,11 @@
 	  [naclj.encode-util :refer :all]
 	  [naclj.key-curve25519]
 	  [naclj.fixture :as f]
+	  [naclj.sodium-random]
 	  [clojure.java.io :refer [reader writer]]
 	  ))
+
+(def rndm (make-random-generator :sodium))
 
 (comment ;;; temporary...
 
@@ -75,7 +78,7 @@
             sk-bs (=>bytes sk)
             pk-bs (=>bytes (:pk this))
             msg-bs (=>bytes msg)
-            nonce-bs (if nonce (=>bytes nonce) (make-random-bytes noncebytes))
+            nonce-bs (if nonce (=>bytes nonce) (random-bytes rndm noncebytes))
             ;; prepend ZERO_BYTES to msg-buffer
             msg0 (byte-array (mapcat seq [(byte-array zerobytes) msg-bs]))
             ct (byte-array (count msg0))
@@ -102,7 +105,7 @@
 
 (defmethod make-key [:sodium :xsalsa20poly1305]
   [provider function & {:keys [] :as xs}]
-  (map->TXsalsa20Poly1305Key :key-bs (make-random-bytes curve25519-beforenmbytes)
+  (map->TXsalsa20Poly1305Key :key-bs (random-bytes rndm curve25519-beforenmbytes)
                              :function :xsalsa20poly1305
                              :provider :sodium))
 
@@ -115,7 +118,7 @@
     (assert (public-key? pk))
     (let [sk-bs (=>bytes sk)
           pk-bs (=>bytes pk)
-          nonce-bs (if nonce (=>bytes nonce) (make-random-bytes noncebytes))
+          nonce-bs (if nonce (=>bytes nonce) (random-bytes rndm noncebytes))
           ;; prepend ZERO_BYTES to msg-buffer
           msg0 (byte-array (mapcat seq [(byte-array zerobytes) msg]))
           ct (byte-array (count msg0))

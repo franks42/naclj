@@ -1,12 +1,32 @@
-(ns naclj.key-store)
+(ns naclj.key-store
+	(:require 
+	  [naclj.key-protocol :as kp]
+	  [naclj.uri-util :as uri]
+  ))
 
-(def the-key-store (atom {}))
+(defprotocol INaclKeyStore
+  "Interface to manage storing and finding private, public and other keys by kid."
+  (add-key [this key][this kid key])
+  (get-key [this kid]))
 
-;(defn make-keystore [owner]
-;  (assoc the-key-store owner))
-  
-(defn add-key [owner key value]
-  (swap! the-key-store assoc-in [owner key] value))
-  
-(defn get-key [owner key]
-  (get-in @the-key-store [owner key]))
+(defmulti make-key-store
+  (fn [provider & xs] [provider]))
+
+;;
+
+(defrecord TDefaultKeyStore [key-store])
+
+(defmethod make-key-store :default
+  [provider]
+  (map->TDefaultKeyStore {:key-store (atom {})}))
+
+(extend-type TDefaultKeyStore
+  INaclKeyStore
+    (add-key 
+      ([this key] (add-key (uri/uri key) key))
+      ([this kid key]
+        (swap! (:key-store this) assoc-in [kid] key)))
+    (get-key [this kid]
+      (get-in @(:key-store this) [kid])))
+
+

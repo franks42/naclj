@@ -1,7 +1,10 @@
 (ns naclj.key-protocol
   (:require [naclj.encode-util :refer :all]
             [naclj.hash-protocol :as hp]
-            [naclj.hash-blake2b]))
+            [naclj.hash-blake2b])
+	(:import 
+	  (java.util.Random)
+            ))
 
 ;;
 
@@ -11,6 +14,7 @@
   (encoded [this])
   (encoding-format [this])
   (pair? [this that])
+  (kid [this])
   )
 
 (defprotocol IKeyPair
@@ -88,6 +92,34 @@
 
 ;;;
 
+(defprotocol IRandomGenerator
+  "Interface that returns arrays of random numbers."
+  (random-bytes [this size])
+  (random-bytes! [this bs]))
+
+(defmulti make-random-generator
+  "Random number generator factory that returns a generator for a certain provider"
+  (fn [provider & xs] provider))
+
+;
+
+(defrecord TRandomGeneratorJava [random-generator])
+
+(defmethod make-random-generator :java.util.Random [provider] 
+  (map->TRandomGeneratorJava {:random-generator (java.util.Random.)}))
+
+(extend-type TRandomGeneratorJava
+  IRandomGenerator
+    (random-bytes [this size] 
+      (let [bs (byte-array size)]
+        (.nextBytes (:random-generator this) bs)
+        bs))
+    (random-bytes! [this bs] 
+      (.nextBytes (:random-generator this) bs)
+      bs))
+
+;;;
+
 (defrecord TGenericKey [key-bs provider])
 
 (defmulti make-key
@@ -95,8 +127,10 @@
 
 (defmethod make-key :default
   [provider function & {:keys [size] :as xs}]
-  (map->TGenericKey :key-bs (make-random-bytes size)
+  (map->TGenericKey :key-bs (random-bytes (make-random-generator :java.util.Random) size)
                     :provider :sodium))
+
+;;;
 
 (extend-type TGenericKey
   IKey
@@ -120,7 +154,9 @@
   we return the hash of that byte-array of that secret.
   To add an additional layer of security, we use a key'ed hashing algorithm where the hashing-key
   is the secret itself. 
-  In order to obtain a hashing-key of the correct size, we actually hash the secret one time.
+  In order to obtain a hashing-key of the correct size, we actually hash the secret one time
+  with a hash-size of the desired key-size for the subsequent key'ed hashing step. The result
+  of the latter is returned as a byte-array of 32 bytes.
   The resulting byte-array hash value will be a univerally unique identifier for the secret, which
   does not leak any data from the secret itself.
   For easier consumption, the returned byte-array can be converted to hex or base64(url)."

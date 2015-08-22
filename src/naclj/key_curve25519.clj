@@ -7,9 +7,13 @@
 	  [naclj.key-protocol :refer :all]
     [naclj.uri-util :refer :all]
 	  [naclj.encode-util :refer :all]
+    [naclj.key-store :as ks]
 	  [naclj.fixture :as f]
 	  [clojure.java.io :refer [reader writer]]
+	  [naclj.sodium-random]
 	  ))
+
+(def rndm (make-random-generator :sodium))
 
 ;; sodium constants
 (def curve25519-seedbytes (.crypto_box_curve25519xsalsa20poly1305_seedbytes (NaCl/sodium)))
@@ -115,6 +119,11 @@
 
 (extend-type TCurve25519PrivateKey
   IKey
+    (kid [this]
+      (if-let [this-kid (:kid this)]
+        this-kid
+        (when (satisfies? IUriIdentify this)
+          (this (uri this)))))
     (pair? [this that]
       (and (public-key? that)
            (equal? (public-key this) that)))
@@ -174,6 +183,11 @@
 
 (extend-type TCurve25519PublicKey
   IKey
+    (kid [this]
+      (if-let [this-kid (:kid this)]
+        this-kid
+        (when (satisfies? IUriIdentify this)
+          (this (uri this)))))
     (pair? [this that]
       (and (private-key? that)
            (equal? this (public-key that))))
@@ -206,6 +220,11 @@
 
 (extend-type TCurve25519DHKey
   IKey
+    (kid [this]
+      (if-let [this-kid (:kid this)]
+        this-kid
+        (when (satisfies? IUriIdentify this)
+          (this (uri this)))))
     (pair? [this that] false)
   IEqual
     (equal? [this that] (equal? (=>bytes! this) (=>bytes! that)))
@@ -241,7 +260,7 @@
     (assert (public-key? pk))
     (let [sk-bs (=>bytes! sk)
           pk-bs (=>bytes! pk)
-          nonce-bs (if nonce (=>bytes! nonce) (make-random-bytes noncebytes))
+          nonce-bs (if nonce (=>bytes! nonce) (random-bytes rndm noncebytes))
           ;; prepend ZERO_BYTES to msg-buffer
           msg0 (byte-array (mapcat seq [(byte-array zerobytes) msg]))
           ct (byte-array (count msg0))
@@ -305,7 +324,7 @@
 (def pk-bob (p/public-key kp-bob))
 (def ct-m (c/box-curve25519xsalsa20poly1305 sk-alice pk-bob (=>bytes "hello from Alice to Bob")))
 ct-m
-(def msg-m (c/box-open-curve25519xsalsa20poly1305 sk-bob pk-alice (:nonce ct-m) (:ct ct-m)))
+(def msg-m (c/box-open-curve25519xsalsa20poly1305 sk-bob pk-alice (:nonce ct-m) (:cypher-text ct-m)))
 msg-m
 (=>string (:msg msg-m))
 )

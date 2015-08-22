@@ -8,6 +8,7 @@
 	  [naclj.key-protocol :refer :all]
 	  [naclj.encode-util :refer :all]
     [naclj.uri-util :refer :all]
+    [naclj.key-store :as ks]
 	  [naclj.fixture :as f]
 	  [clojure.java.io :refer [reader writer]]
 	  ))
@@ -32,7 +33,7 @@
   ;; make key-pair from either a private-key object, a private-key-bs byte-array,
   ;; a seed (byte-array of ed25519-seedbytes), or from scratch.
   ;; A TEd25519KeyPair is returned.
-  [provider function & {:keys [private-key seed] :as xs}]
+  [provider function & {:keys [private-key seed key-store] :as xs}]
   (if seed
     ;; create a new key-pair from seed
     (let [sk (byte-array ed25519-secretkeybytes)
@@ -77,11 +78,16 @@
        false))
   IUriIdentify
     (uri [this]
-      (java.net.URI. (str "urn:nacl:sk:ed25519:" (=>base64url-str (public-key this)))))
+      (java.net.URI. (str "urn:nacl:kp:ed25519:" (=>base64url-str (public-key this)))))
   )
 
 (extend-type TEd25519PrivateKey
   IKey
+    (kid [this]
+      (if-let [this-kid (:kid this)]
+        this-kid
+        (when (satisfies? IUriIdentify this)
+          (this (uri this)))))
     (pair? [this that]
       (and (public-key? that)
            (equal? (public-key this) that)))
@@ -120,6 +126,11 @@
 
 (extend-type TEd25519PublicKey
   IKey
+    (kid [this]
+      (if-let [this-kid (:kid this)]
+        this-kid
+        (when (satisfies? IUriIdentify this)
+          (this (uri this)))))
     (pair? [this that]
       (and (private-key? that)
            (equal? this (public-key that))))
