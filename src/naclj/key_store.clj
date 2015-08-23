@@ -23,7 +23,7 @@
 (extend-type TDefaultKeyStore
   INaclKeyStore
     (add-key 
-      ([this key] (add-key (uri/uri key) key))
+      ([this key] (add-key this (uri/uri key) key))
       ([this kid key]
         (swap! (:key-store this) assoc-in [kid] key)))
     (get-key [this kid]
