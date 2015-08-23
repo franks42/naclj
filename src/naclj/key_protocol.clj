@@ -3,7 +3,7 @@
             [naclj.hash-protocol :as hp]
             [naclj.hash-blake2b])
 	(:import 
-	  (java.util.Random)
+	  (java.security.SecureRandom)
             ))
 
 ;;
@@ -105,8 +105,8 @@
 
 (defrecord TRandomGeneratorJava [random-generator])
 
-(defmethod make-random-generator :java.util.Random [provider] 
-  (map->TRandomGeneratorJava {:random-generator (java.util.Random.)}))
+(defmethod make-random-generator :java.security.SecureRandom [provider] 
+  (map->TRandomGeneratorJava {:random-generator (java.security.SecureRandom.)}))
 
 (extend-type TRandomGeneratorJava
   IRandomGenerator
@@ -127,7 +127,7 @@
 
 (defmethod make-key :default
   [provider function & {:keys [size] :as xs}]
-  (map->TGenericKey :key-bs (random-bytes (make-random-generator :java.util.Random) size)
+  (map->TGenericKey :key-bs (random-bytes (make-random-generator :java.security.SecureRandom) size)
                     :provider :sodium))
 
 ;;;
