@@ -1,4 +1,4 @@
-# Depricated Effort
+# Deprecated Effort
 
 Please look at ""lvh/caesium" for alternative clojure-nacl/libsodium bindings.
 
