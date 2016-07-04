@@ -1,3 +1,7 @@
+# Depricated Effort
+
+Please look at ""lvh/caesium" for alternative clojure-nacl/libsodium bindings.
+
 # naclj
 
 Clojure library that abstracts libsodium's NaCl primitives (curve25519, ed25519, blake2b, box/unbox, sign/verify, etc.)
